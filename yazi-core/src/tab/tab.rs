@@ -24,8 +24,8 @@ pub struct Tab {
 	pub history:   History,
 	pub selected:  Selected,
 
-	pub preview: Preview,
 	pub spot:    Spot,
+	pub preview: Preview,
 	pub finder:  Option<Finder>,
 	pub search:  Option<JoinHandle<Result<()>>>,
 }
