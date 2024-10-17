@@ -37,11 +37,11 @@ pub fn spot(
 			} else {
 				return Err("unloaded plugin".into_lua_err());
 			};
-			plugin.raw_set("file", File::cast(&lua, file)?)?;
+			plugin.raw_set("_file", File::cast(&lua, file)?)?;
 			plugin.raw_set("_mime", mime)?;
-			plugin.raw_set("skip", skip)?;
-			plugin.raw_set("area", Rect::from(LAYOUT.load().preview))?;
-			plugin.raw_set("window", Window::default())?;
+			plugin.raw_set("_skip", skip)?;
+			plugin.raw_set("_area", Rect::from(LAYOUT.load().preview))?;
+			plugin.raw_set("_window", Window::default())?;
 
 			if ct2.is_cancelled() { Ok(()) } else { plugin.call_async_method("spot", ()).await }
 		};

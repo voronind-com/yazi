@@ -25,8 +25,8 @@ impl<'a> TryFrom<Table<'a>> for SpotLock {
 			cha:  file.cha,
 			mime: t.raw_get("_mime")?,
 
-			skip:   t.raw_get("skip")?,
-			window: t.raw_get("window")?,
+			skip:   t.raw_get("_skip")?,
+			window: t.raw_get("_window")?,
 			data:   Default::default(),
 		})
 	}
