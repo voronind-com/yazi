@@ -1,4 +1,3 @@
-use yazi_macro::render;
 use yazi_shared::event::Cmd;
 
 use crate::spot::Spot;
@@ -16,8 +15,7 @@ impl From<bool> for Opt {
 
 impl Spot {
 	#[yazi_codegen::command]
-	pub fn close(&mut self, opt: Opt) {
-		self.visible = false;
-		render!();
+	pub fn close(&mut self, _: Opt) {
+		todo!();
 	}
 }

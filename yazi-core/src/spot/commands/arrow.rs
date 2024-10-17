@@ -1,4 +1,3 @@
-use yazi_macro::render;
 use yazi_shared::event::{Cmd, Data};
 
 use crate::spot::Spot;
@@ -13,35 +12,7 @@ impl From<Cmd> for Opt {
 
 impl Spot {
 	#[yazi_codegen::command]
-	pub fn arrow(&mut self, opt: Opt) {
-		if opt.step > 0 { self.next(opt.step as usize) } else { self.prev(opt.step.unsigned_abs()) }
-	}
-
-	fn next(&mut self, step: usize) {
-		let len = self.items.len();
-		if len == 0 {
-			return;
-		}
-
-		let old = self.cursor;
-		self.cursor = (self.cursor + step).min(len - 1);
-
-		let limit = self.limit();
-		if self.cursor >= len.min(self.offset + limit) {
-			self.offset = len.saturating_sub(limit).min(self.offset + self.cursor - old);
-		}
-
-		render!(old != self.cursor);
-	}
-
-	fn prev(&mut self, step: usize) {
-		let old = self.cursor;
-		self.cursor = self.cursor.saturating_sub(step);
-
-		if self.cursor < self.offset {
-			self.offset = self.offset.saturating_sub(old - self.cursor);
-		}
-
-		render!(old != self.cursor);
+	pub fn arrow(&mut self, _: Opt) {
+		todo!();
 	}
 }
