@@ -1,6 +1,6 @@
 use std::mem;
 
-use mlua::{AnyUserData, Table, TableExt};
+use mlua::{AnyUserData, ObjectLike, Table};
 use tracing::error;
 use yazi_plugin::{LUA, cast_to_renderable};
 
@@ -13,7 +13,7 @@ impl Progress {
 		let mut patches = vec![];
 		let mut f = || {
 			let comp: Table = LUA.globals().raw_get("Progress")?;
-			for widget in comp.call_method::<_, Vec<AnyUserData>>("partial_render", ())? {
+			for widget in comp.call_method::<Vec<AnyUserData>>("partial_render", ())? {
 				let Some(w) = cast_to_renderable(&widget) else { continue };
 
 				let area = w.area();

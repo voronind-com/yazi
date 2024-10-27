@@ -3,7 +3,7 @@ use std::time::{Duration, SystemTime, UNIX_EPOCH};
 use mlua::{AnyUserData, ExternalError, Lua, Table, UserDataFields, UserDataMethods};
 use yazi_shared::fs::ChaKind;
 
-use crate::{RtRef, bindings::Cast};
+use crate::{Runtime, bindings::Cast};
 
 pub struct Cha;
 
@@ -76,23 +76,33 @@ impl Cha {
 			// TODO: remove these deprecated properties in the future
 			{
 				reg.add_field_method_get("length", |lua, me| {
-					warn_deprecated(lua.named_registry_value::<RtRef>("rt")?.current());
+					lua
+						.named_registry_value::<AnyUserData>("rt")?
+						.borrow_scoped(|rt: &Runtime| warn_deprecated(rt.current()))?;
 					Ok(me.len)
 				});
 				reg.add_field_method_get("created", |lua, me| {
-					warn_deprecated(lua.named_registry_value::<RtRef>("rt")?.current());
+					lua
+						.named_registry_value::<AnyUserData>("rt")?
+						.borrow_scoped(|rt: &Runtime| warn_deprecated(rt.current()))?;
 					Ok(me.btime.and_then(|t| t.duration_since(UNIX_EPOCH).map(|d| d.as_secs_f64()).ok()))
 				});
 				reg.add_field_method_get("modified", |lua, me| {
-					warn_deprecated(lua.named_registry_value::<RtRef>("rt")?.current());
+					lua
+						.named_registry_value::<AnyUserData>("rt")?
+						.borrow_scoped(|rt: &Runtime| warn_deprecated(rt.current()))?;
 					Ok(me.mtime.and_then(|t| t.duration_since(UNIX_EPOCH).map(|d| d.as_secs_f64()).ok()))
 				});
 				reg.add_field_method_get("accessed", |lua, me| {
-					warn_deprecated(lua.named_registry_value::<RtRef>("rt")?.current());
+					lua
+						.named_registry_value::<AnyUserData>("rt")?
+						.borrow_scoped(|rt: &Runtime| warn_deprecated(rt.current()))?;
 					Ok(me.atime.and_then(|t| t.duration_since(UNIX_EPOCH).map(|d| d.as_secs_f64()).ok()))
 				});
 				reg.add_method("permissions", |lua, _me, ()| {
-					warn_deprecated(lua.named_registry_value::<RtRef>("rt")?.current());
+					lua
+						.named_registry_value::<AnyUserData>("rt")?
+						.borrow_scoped(|rt: &Runtime| warn_deprecated(rt.current()))?;
 					Ok(
 						#[cfg(unix)]
 						Some(yazi_shared::fs::permissions(_me.mode, _me.is_dummy())),

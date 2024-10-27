@@ -1,6 +1,6 @@
 use std::{collections::HashMap, sync::Arc};
 
-use mlua::{ExternalError, Lua, Table, TableExt, Value};
+use mlua::{ExternalError, Lua, ObjectLike, Table, Value};
 use tracing::error;
 use yazi_config::LAYOUT;
 use yazi_dds::Sendable;
@@ -42,23 +42,23 @@ impl Utils {
 				let id: mlua::String = c.get("_id")?;
 				let id = id.to_str()?;
 
-				match id {
+				match &*id {
 					"current" => {
 						LAYOUT.store(Arc::new(yazi_config::Layout {
-							current: *c.raw_get::<_, crate::elements::Rect>("_area")?,
+							current: *c.raw_get::<crate::elements::Rect>("_area")?,
 							..*LAYOUT.load_full()
 						}));
 					}
 					"preview" => {
 						LAYOUT.store(Arc::new(yazi_config::Layout {
-							preview: *c.raw_get::<_, crate::elements::Rect>("_area")?,
+							preview: *c.raw_get::<crate::elements::Rect>("_area")?,
 							..*LAYOUT.load_full()
 						}));
 					}
 					_ => {}
 				}
 
-				match c.call_method::<_, Table>("render", ()) {
+				match c.call_method::<Table>("render", ()) {
 					Err(e) => {
 						error!("Failed to `render()` the `{id}` component:\n{e}");
 						lua.create_table()

@@ -27,12 +27,14 @@ impl Utils {
 		ya.raw_set(
 			"quote",
 			lua.create_function(|_, (s, unix): (mlua::String, Option<bool>)| {
-				let s = match unix {
-					Some(true) => yazi_shared::shell::escape_unix(s.to_str()?),
-					Some(false) => yazi_shared::shell::escape_windows(s.to_str()?),
-					None => yazi_shared::shell::escape_native(s.to_str()?),
-				};
-				Ok(s.into_owned())
+				todo!();
+				Ok(1)
+				// let s = match unix {
+				// 	Some(true) => yazi_shared::shell::escape_unix(&s.to_str()?),
+				// 	Some(false) => yazi_shared::shell::escape_windows(&s.to_str()?),
+				// 	None => yazi_shared::shell::escape_native(&s.to_str()?),
+				// };
+				// Ok(s.into_owned())
 			})?,
 		)?;
 

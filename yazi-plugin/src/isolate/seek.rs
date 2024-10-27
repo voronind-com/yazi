@@ -1,4 +1,4 @@
-use mlua::TableExt;
+use mlua::ObjectLike;
 use yazi_config::LAYOUT;
 use yazi_macro::emit;
 use yazi_shared::{Layer, event::Cmd};

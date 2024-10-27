@@ -31,7 +31,10 @@ impl Text {
 		let new = lua.create_function(|_, (_, value): (Table, Value)| Text::try_from(value))?;
 
 		let parse = lua.create_function(|_, code: mlua::String| {
-			Ok(Text { inner: code.into_text().into_lua_err()?, ..Default::default() })
+			todo!();
+			Ok(1)
+			// Ok(Text { inner: code.into_text().into_lua_err()?, ..Default::default()
+			// })
 		})?;
 
 		let text = lua.create_table_from([
@@ -52,13 +55,13 @@ impl Text {
 	}
 }
 
-impl TryFrom<Value<'_>> for Text {
+impl TryFrom<Value> for Text {
 	type Error = mlua::Error;
 
 	fn try_from(value: Value) -> mlua::Result<Self> {
 		let inner = match value {
 			Value::Table(tb) => return Self::try_from(tb),
-			Value::String(s) => s.to_string_lossy().into_owned().into(),
+			Value::String(s) => s.to_string_lossy().into(),
 			Value::UserData(ud) => {
 				if let Ok(line) = ud.take::<Line>() {
 					line.0.into()
@@ -74,14 +77,14 @@ impl TryFrom<Value<'_>> for Text {
 	}
 }
 
-impl TryFrom<Table<'_>> for Text {
+impl TryFrom<Table> for Text {
 	type Error = mlua::Error;
 
-	fn try_from(tb: Table<'_>) -> Result<Self, Self::Error> {
+	fn try_from(tb: Table) -> Result<Self, Self::Error> {
 		let mut lines = Vec::with_capacity(tb.raw_len());
 		for v in tb.sequence_values() {
 			match v? {
-				Value::String(s) => lines.push(s.to_string_lossy().into_owned().into()),
+				Value::String(s) => lines.push(s.to_string_lossy().into()),
 				Value::UserData(ud) => {
 					if let Ok(span) = ud.take::<Span>() {
 						lines.push(span.0.into());
@@ -116,7 +119,7 @@ impl From<Text> for ratatui::widgets::Paragraph<'static> {
 }
 
 impl UserData for Text {
-	fn add_methods<'lua, M: mlua::UserDataMethods<'lua, Self>>(methods: &mut M) {
+	fn add_methods<M: mlua::UserDataMethods<Self>>(methods: &mut M) {
 		crate::impl_area_method!(methods);
 		crate::impl_style_method!(methods, inner.style);
 		crate::impl_style_shorthands!(methods, inner.style);

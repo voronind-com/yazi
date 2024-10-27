@@ -19,7 +19,7 @@ impl App {
 		let collision = COLLISION.swap(false, Ordering::Relaxed);
 		let frame = term
 			.draw(|f| {
-				_ = Lives::scope(&self.cx, |_| Ok(f.render_widget(Root::new(&self.cx), f.area())));
+				_ = Lives::scope(&self.cx, || Ok(f.render_widget(Root::new(&self.cx), f.area())));
 
 				if let Some(pos) = self.cx.cursor() {
 					f.set_cursor_position(pos);

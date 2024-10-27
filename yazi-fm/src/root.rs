@@ -1,4 +1,4 @@
-use mlua::{Table, TableExt};
+use mlua::{ObjectLike, Table};
 use ratatui::{buffer::Buffer, layout::Rect, widgets::Widget};
 use tracing::error;
 use yazi_plugin::{LUA, elements::render_widgets};
@@ -18,7 +18,7 @@ impl<'a> Widget for Root<'a> {
 	fn render(self, area: Rect, buf: &mut Buffer) {
 		let mut f = || {
 			let area = yazi_plugin::elements::Rect::from(area);
-			let root = LUA.globals().raw_get::<_, Table>("Root")?.call_method::<_, Table>("new", area)?;
+			let root = LUA.globals().raw_get::<Table>("Root")?.call_method::<Table>("new", area)?;
 
 			render_widgets(root.call_method("render", ())?, buf);
 			Ok::<_, mlua::Error>(())

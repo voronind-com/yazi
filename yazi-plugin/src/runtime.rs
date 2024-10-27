@@ -5,15 +5,13 @@ use mlua::{Function, UserData};
 #[derive(Default)]
 pub struct Runtime {
 	frames: VecDeque<RuntimeFrame>,
-	blocks: HashMap<String, Vec<Function<'static>>>,
+	blocks: HashMap<String, Vec<Function>>,
 }
 
 struct RuntimeFrame {
 	id:    String,
 	calls: usize,
 }
-
-pub type RtRef<'lua> = mlua::UserDataRefMut<'lua, Runtime>;
 
 impl Runtime {
 	pub fn new(id: &str) -> Self {
@@ -38,11 +36,11 @@ impl Runtime {
 		})
 	}
 
-	pub fn get_block(&self, id: &str, calls: usize) -> Option<Function<'static>> {
+	pub fn get_block(&self, id: &str, calls: usize) -> Option<Function> {
 		self.blocks.get(id).and_then(|v| v.get(calls)).cloned()
 	}
 
-	pub fn put_block(&mut self, f: Function<'static>) -> bool {
+	pub fn put_block(&mut self, f: Function) -> bool {
 		let Some(cur) = self.frames.back() else { return false };
 		if let Some(v) = self.blocks.get_mut(&cur.id) {
 			v.push(f);
