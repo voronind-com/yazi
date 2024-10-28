@@ -1,4 +1,4 @@
-use mlua::IntoLua;
+use mlua::{IntoLua, Lua};
 
 pub struct Range<T>(std::ops::Range<T>);
 
@@ -10,7 +10,7 @@ impl<T> IntoLua for Range<T>
 where
 	T: IntoLua,
 {
-	fn into_lua(self, lua: &mlua::Lua) -> mlua::Result<mlua::Value> {
+	fn into_lua(self, lua: &Lua) -> mlua::Result<mlua::Value> {
 		lua.create_sequence_from([self.0.start, self.0.end])?.into_lua(lua)
 	}
 }

@@ -1,6 +1,6 @@
 use std::{ops::Deref, str::FromStr};
 
-use mlua::{ExternalResult, IntoLua};
+use mlua::{ExternalResult, IntoLua, Lua};
 
 pub struct Position(yazi_config::popup::Position);
 
@@ -33,7 +33,7 @@ impl TryFrom<mlua::Table> for Position {
 }
 
 impl IntoLua for Position {
-	fn into_lua(self, lua: &mlua::Lua) -> mlua::Result<mlua::Value> {
+	fn into_lua(self, lua: &Lua) -> mlua::Result<mlua::Value> {
 		lua
 			.create_table_from([
 				(1.into_lua(lua)?, self.origin.to_string().into_lua(lua)?),
