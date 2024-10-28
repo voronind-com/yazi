@@ -2,6 +2,8 @@ use mlua::{AnyUserData, Lua, Table, UserDataRef};
 
 use crate::{bindings::Cast, impl_file_fields, impl_file_methods};
 
+pub type FileRef<'lua> = UserDataRef<yazi_shared::fs::File>;
+
 pub struct File;
 
 impl File {

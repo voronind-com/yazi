@@ -32,7 +32,7 @@ impl UserData for Selected {
 
 		methods.add_meta_method(MetaMethod::Pairs, |lua, me, ()| {
 			let iter = lua.create_function(
-				// TODO: UserDataRef
+				// FIXME: UserDataRef
 				|lua, mut iter: UserDataRefMut<Iter<hash_map::Keys<yazi_shared::fs::Url, u64>, _>>| {
 					if let Some(next) = iter.next() {
 						(next.0, Url::cast(lua, next.1.clone())?).into_lua_multi(lua)

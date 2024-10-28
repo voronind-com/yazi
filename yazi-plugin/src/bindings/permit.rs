@@ -3,6 +3,8 @@ use std::{mem, ops::Deref};
 use mlua::{UserData, prelude::LuaUserDataMethods};
 use tokio::sync::SemaphorePermit;
 
+pub type PermitRef<'lua, F> = mlua::UserDataRef<Permit<F>>;
+
 pub struct Permit<F: FnOnce()> {
 	inner:    Option<SemaphorePermit<'static>>,
 	destruct: Option<F>,

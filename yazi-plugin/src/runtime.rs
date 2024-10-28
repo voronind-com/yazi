@@ -13,6 +13,8 @@ struct RuntimeFrame {
 	calls: usize,
 }
 
+pub type RtRef<'lua> = mlua::UserDataRefMut<Runtime>;
+
 impl Runtime {
 	pub fn new(id: &str) -> Self {
 		Self {

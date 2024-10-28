@@ -1,9 +1,9 @@
 use std::time::Duration;
 
-use mlua::{AnyUserData, FromLua, Lua, MultiValue, Table, Value};
+use mlua::{FromLua, Lua, MultiValue, Table, Value};
 
 use super::Rect;
-use crate::Runtime;
+use crate::RtRef;
 
 static WARNED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
@@ -36,9 +36,7 @@ impl Paragraph {
 			(
 				"__call",
 				lua.create_function(|lua, (_, area, lines): (Table, Rect, Value)| {
-					lua
-						.named_registry_value::<AnyUserData>("rt")?
-						.borrow_scoped(|rt: &Runtime| warn_deprecated(rt.current()))?;
+					warn_deprecated(lua.named_registry_value::<RtRef>("rt")?.current());
 					lua
 						.load(mlua::chunk! {
 							return ui.Text($lines):area($area)
@@ -49,9 +47,7 @@ impl Paragraph {
 			(
 				"__index",
 				lua.create_function(|lua, (_, key): (Table, mlua::String)| {
-					lua
-						.named_registry_value::<AnyUserData>("rt")?
-						.borrow_scoped(|rt: &Runtime| warn_deprecated(rt.current()))?;
+					warn_deprecated(lua.named_registry_value::<RtRef>("rt")?.current());
 					lua
 						.load(mlua::chunk! {
 							return ui.Text[$key]

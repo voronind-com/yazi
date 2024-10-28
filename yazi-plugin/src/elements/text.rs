@@ -31,10 +31,7 @@ impl Text {
 		let new = lua.create_function(|_, (_, value): (Table, Value)| Text::try_from(value))?;
 
 		let parse = lua.create_function(|_, code: mlua::String| {
-			todo!();
-			Ok(1)
-			// Ok(Text { inner: code.into_text().into_lua_err()?, ..Default::default()
-			// })
+			Ok(Text { inner: code.as_bytes().into_text().into_lua_err()?, ..Default::default() })
 		})?;
 
 		let text = lua.create_table_from([

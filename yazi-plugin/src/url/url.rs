@@ -2,6 +2,8 @@ use mlua::{AnyUserData, ExternalError, Lua, MetaMethod, UserDataFields, UserData
 
 use crate::bindings::Cast;
 
+pub type UrlRef = UserDataRef<yazi_shared::fs::Url>;
+
 pub struct Url;
 
 impl Url {
