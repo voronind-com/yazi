@@ -1,6 +1,6 @@
 use std::ops::Deref;
 
-use mlua::{AnyUserData, UserData};
+use mlua::{AnyUserData, MetaMethod, UserData, UserDataMethods};
 
 use super::SCOPE;
 
@@ -21,4 +21,8 @@ impl Finder {
 	}
 }
 
-impl UserData for Finder {}
+impl UserData for Finder {
+	fn add_methods<M: UserDataMethods<Self>>(methods: &mut M) {
+		methods.add_meta_method(MetaMethod::ToString, |_, me, ()| Ok(me.filter.to_string()));
+	}
+}
