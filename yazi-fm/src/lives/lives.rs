@@ -22,7 +22,7 @@ impl Lives {
 		let result = LUA.scope(|scope| {
 			defer! { SCOPE.drop(); }
 			SCOPE.init(*unsafe {
-				mem::transmute::<&&mut mlua::Scope<'_, '_>, &&mlua::Scope<'static, 'static>>(&scope)
+				mem::transmute::<&&mut mlua::Scope<'_, '_>, &&mut mlua::Scope<'static, 'static>>(&scope)
 			});
 			LUA.set_named_registry_value("cx", scope.create_any_userdata_ref(cx)?)?;
 
